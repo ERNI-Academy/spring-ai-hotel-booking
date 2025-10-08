@@ -1,0 +1,16 @@
+GET http://localhost:8080/api/terms/policy/booking
+
+### 
+
+POST http://localhost:8080/api/customer-support/test
+Content-Type: application/json
+
+{
+    "text": "I want to cancel a booking"
+}
+
+###
+GET http://localhost:8080/api/booking
+
+###
+GET http://localhost:8080/chat?userMessage=tell+me+a+joke

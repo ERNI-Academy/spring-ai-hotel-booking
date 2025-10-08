@@ -1,0 +1,98 @@
+<div class="bookings-container">
+  <!-- Header with title -->
+  <mat-toolbar class="bookings-header">
+    <div class="header-content">
+      <div class="title-section">
+        <mat-icon class="header-icon">hotel</mat-icon>
+        <h1>SpringAI Hotel Bookings</h1>
+        <button mat-icon-button
+                (click)="refreshBookings()"
+                matTooltip="Refresh bookings data"
+                class="refresh-button">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+  </mat-toolbar>
+
+  <!-- Data Table Card -->
+  <mat-card class="table-card">
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource()" matSort class="bookings-table">
+
+          <!-- Booking Number Column -->
+          <ng-container matColumnDef="bookingNumber">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Number</th>
+            <td mat-cell *matCellDef="let booking">
+              <span class="booking-number">{{ booking.bookingNumber }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let booking">
+              <span class="guest">{{ booking.firstName }} {{ booking.lastName }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Booking Date</th>
+            <td mat-cell *matCellDef="let booking">
+              <span class="date-cell">{{ booking.date | date:'MMM d, y' }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="bookingStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let booking">
+              <mat-chip
+                [class]="'status-' + booking.bookingStatus.toLowerCase()"
+                selected>
+                {{ booking.bookingStatus }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- From Column -->
+          <ng-container matColumnDef="from">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
+            <td mat-cell *matCellDef="let booking">
+              <span class="date-cell">{{ booking.from | date:'MMM d, y' }}</span>
+            </td>
+          </ng-container>
+
+          <!-- To Column -->
+          <ng-container matColumnDef="to">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>To</th>
+            <td mat-cell *matCellDef="let booking">
+              <span class="date-cell">{{ booking.to | date:'MMM d, y' }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Booking Class Column -->
+          <ng-container matColumnDef="roomType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Room Type</th>
+            <td mat-cell *matCellDef="let booking">
+              <span class="room-class">{{ booking.roomType }}</span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns()"></tr>
+        </table>
+
+        <!-- No data message -->
+        @if (bookings().length === 0) {
+          <div class="no-data">
+            <mat-icon class="no-data-icon">inbox</mat-icon>
+            <h3>No bookings found</h3>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

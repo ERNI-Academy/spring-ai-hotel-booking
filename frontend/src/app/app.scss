@@ -1,0 +1,59 @@
+.app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.main-layout {
+  display: flex;
+  height: 100vh;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.bookings-section {
+  flex: 0 0 65%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.chat-section {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+// Responsive design for mobile
+@media (max-width: 1024px) {
+  .main-layout {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .bookings-section {
+    flex: 0 0 60%;
+  }
+
+  .chat-section {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-layout {
+    padding: 0.25rem;
+  }
+
+  .bookings-section {
+    flex: 0 0 55%;
+  }
+}
