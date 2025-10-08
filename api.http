@@ -12,5 +12,3 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/api/booking
 
-###
-GET http://localhost:8080/chat?userMessage=tell+me+a+joke
