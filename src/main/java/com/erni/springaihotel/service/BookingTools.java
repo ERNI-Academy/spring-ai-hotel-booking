@@ -1,6 +1,6 @@
-package com.raffaele.springaihotel.service;
+package com.erni.springaihotel.service;
 
-import com.raffaele.springaihotel.model.BookingDetails;
+import com.erni.springaihotel.model.BookingDetails;
 
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;

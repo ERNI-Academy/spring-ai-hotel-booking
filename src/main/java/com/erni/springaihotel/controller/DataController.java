@@ -1,7 +1,7 @@
-package com.raffaele.springaihotel.controller;
+package com.erni.springaihotel.controller;
 
-import com.raffaele.springaihotel.model.BookingDetails;
-import com.raffaele.springaihotel.service.BookingService;
+import com.erni.springaihotel.model.BookingDetails;
+import com.erni.springaihotel.service.BookingService;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.raffaele.springaihotel.controller;
+package com.erni.springaihotel.controller;
 
 import java.util.Collections;
 import java.util.List;

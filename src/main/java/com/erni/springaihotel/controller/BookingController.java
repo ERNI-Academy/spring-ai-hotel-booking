@@ -1,6 +1,6 @@
-package com.raffaele.springaihotel.controller;
+package com.erni.springaihotel.controller;
 
-import com.raffaele.springaihotel.service.ChatService;
+import com.erni.springaihotel.service.ChatService;
 
 import java.util.UUID;
 

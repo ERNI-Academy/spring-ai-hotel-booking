@@ -8,7 +8,7 @@
 		<version>3.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.raffaele</groupId>
+	<groupId>com.erni</groupId>
 	<artifactId>springaihotel</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>springaihotel</name>

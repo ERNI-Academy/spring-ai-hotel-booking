@@ -1,4 +1,4 @@
-package com.raffaele.springaihotel.model;
+package com.erni.springaihotel.model;
 
 public enum RoomType
 {

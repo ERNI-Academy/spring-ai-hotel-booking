@@ -30,7 +30,7 @@ A full-stack hotel booking application using Spring Boot (Java) for the backend 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/raffaele-auriemma/spring-ai-hotel-booking.git
+git clone https://github.com/ERNI-Academy/spring-ai-hotel-booking.git
 cd spring-ai-hotel-booking
 ```
 
@@ -75,7 +75,7 @@ Edit `src/main/resources/application.yml` for backend settings (database, AI, lo
 
 ```
 spring-ai-hotel-booking/
-├── src/main/java/com/raffaele/springaihotel/
+├── src/main/java/com/erni/springaihotel/
 │   ├── controller/          # REST controllers
 │   ├── service/             # Business logic and AI services
 │   └── model/               # Data models

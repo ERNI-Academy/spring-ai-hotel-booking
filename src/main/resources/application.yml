@@ -43,7 +43,7 @@ spring:
 
 logging:
   level:
-    com.raffaele: DEBUG
+    com.erni: DEBUG
     org.springframework.ai: DEBUG
     org.springframework.jdbc.core: TRACE
 

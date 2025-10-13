@@ -1,9 +1,9 @@
-package com.raffaele.springaihotel.service;
+package com.erni.springaihotel.service;
 
-import com.raffaele.springaihotel.model.Booking;
-import com.raffaele.springaihotel.model.BookingDetails;
-import com.raffaele.springaihotel.model.BookingStatus;
-import com.raffaele.springaihotel.model.SpringAIHotelDB;
+import com.erni.springaihotel.model.Booking;
+import com.erni.springaihotel.model.BookingDetails;
+import com.erni.springaihotel.model.BookingStatus;
+import com.erni.springaihotel.model.SpringAIHotelDB;
 
 import java.time.LocalDate;
 import java.util.List;

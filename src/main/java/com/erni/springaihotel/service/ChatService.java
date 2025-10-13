@@ -1,4 +1,4 @@
-package com.raffaele.springaihotel.service;
+package com.erni.springaihotel.service;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;

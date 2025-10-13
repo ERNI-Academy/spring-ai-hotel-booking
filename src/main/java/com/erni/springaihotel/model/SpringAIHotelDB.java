@@ -1,4 +1,4 @@
-package com.raffaele.springaihotel.model;
+package com.erni.springaihotel.model;
 
 import java.util.ArrayList;
 import java.util.List;

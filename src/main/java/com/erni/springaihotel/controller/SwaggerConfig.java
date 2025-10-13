@@ -1,4 +1,4 @@
-package com.raffaele.springaihotel.controller;
+package com.erni.springaihotel.controller;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
