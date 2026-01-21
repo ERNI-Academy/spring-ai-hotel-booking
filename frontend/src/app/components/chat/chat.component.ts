@@ -1,4 +1,4 @@
-import { Component, effect, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Component, effect, ElementRef, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -11,11 +11,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ChatService } from '../../services/chat.service';
-import {
-  HttpClient, HttpDownloadProgressEvent,
-  HttpEvent,
-  HttpEventType,
-} from '@angular/common/http';
 
 interface Message {
   id: string;
@@ -142,36 +137,6 @@ export class ChatComponent {
     this.streamSSE(messageText, aiMessageId);
   }
 
-  private async streamSSEnew(messageText: string, aiMessageId: string): Promise<void> {
-    const es = new EventSource('/api/customer-support');
-    let accumulatedContent = '';
-
-    const aiResponse: Message = {
-      id: aiMessageId,
-      content: '',
-      isUser: false,
-      timestamp: new Date()
-    };
-    this.messages.update(messages => [...messages, aiResponse]);
-
-    es.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log("Received:", data);
-
-      accumulatedContent += data;
-      this.messages.update(messages =>
-        messages.map(msg =>
-          msg.id === aiMessageId
-            ? { ...msg, content: accumulatedContent }
-            : msg
-        )
-      );
-    };
-    es.onerror = () => {
-      console.warn("Connection lost. Reconnecting...");
-    };
-  }
-
   private async streamSSE(messageText: string, aiMessageId: string): Promise<void> {
     try {
       const response = await fetch('/api/customer-support', {
@@ -187,10 +152,11 @@ export class ChatComponent {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
+      const decoder = new TextDecoderStream();
       let accumulatedContent = '';
       let buffer = '';
+      response.body?.pipeThrough(decoder);
+      const reader = decoder.readable.getReader();
 
       if (!reader) {
         throw new Error('No reader available');
@@ -205,23 +171,11 @@ export class ChatComponent {
           break;
         }
 
-        buffer += decoder.decode(value, { stream: true });
+        buffer += value;
 
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
-
-        for (const line of lines) {
-          if (line.startsWith('data:')) {
-            const data = line.slice(5);
-
-            if (data === '' || data === ' ') {
-              // Empty data line represents a newline in the content
-              accumulatedContent += '\n';
-            } else if (data !== '[DONE]') {
-              accumulatedContent += data;
-            }
-          }
-        }
+        const data = buffer.replaceAll("\n\n", "").replaceAll("data:", "");
+        accumulatedContent += data;
+        buffer = '';
 
         if (first) {
           const aiResponse: Message = {
@@ -249,7 +203,7 @@ export class ChatComponent {
         messages.map(msg =>
           msg.id === aiMessageId
             ? { ...msg, content: 'Sorry, I\'m having trouble connecting right now. Please try again in a moment.' }
-            : msg
+              : msg
         )
       );
       this.isLoading.set(false);
