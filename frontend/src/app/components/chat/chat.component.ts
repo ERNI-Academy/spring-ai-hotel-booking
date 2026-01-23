@@ -64,6 +64,20 @@ export class ChatComponent {
     });
   }
 
+  addUserMessage(messageText: string) {
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: messageText,
+      isUser: true,
+      timestamp: new Date()
+    };
+
+    this.messages.update(messages => [...messages, userMessage]);
+    this.currentMessage.set('');
+    this.isLoading.set(true);
+  }
+
   sendMessage() {
     const messageText = this.currentMessage()
       .trim();
@@ -71,18 +85,7 @@ export class ChatComponent {
       return;
     }
 
-    // Add user message
-    const userMessage: Message = {
-      id:        Date.now()
-                   .toString(),
-      content:   messageText,
-      isUser:    true,
-      timestamp: new Date()
-    };
-
-    this.messages.update(messages => [...messages, userMessage]);
-    this.currentMessage.set('');
-    this.isLoading.set(true);
+    this.addUserMessage(messageText);
 
     // Send message to API
     this.chatService.sendMessage(messageText)
@@ -121,16 +124,7 @@ export class ChatComponent {
       return;
     }
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      content: messageText,
-      isUser: true,
-      timestamp: new Date()
-    };
-
-    this.messages.update(messages => [...messages, userMessage]);
-    this.currentMessage.set('');
-    this.isLoading.set(true);
+    this.addUserMessage(messageText);
 
     // Add placeholder for AI response
     const aiMessageId = (Date.now() + 1).toString();
@@ -173,7 +167,7 @@ export class ChatComponent {
 
         buffer += value;
 
-        const data = buffer.replaceAll("\n\n", "").replaceAll("data:", "");
+        const data = buffer.replace(/data:|\n\n/g, "");
         accumulatedContent += data;
         buffer = '';
 
