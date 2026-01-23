@@ -50,8 +50,7 @@ export class ChatComponent {
   ]);
   currentMessage = signal('');
   isLoading = signal(false);
-  // Computed signal for display columns
-  //displayedColumns = signal(['bookingNumber', 'firstName', 'lastName', 'date', 'bookingStatus', 'from', 'to', 'roomType']);
+
   // ViewChild reference to the messages container for auto-scrolling
   @ViewChild('messagesContainer') private readonly messagesContainer!: ElementRef;
 
