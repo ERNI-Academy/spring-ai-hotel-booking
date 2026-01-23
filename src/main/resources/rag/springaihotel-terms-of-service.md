@@ -16,7 +16,7 @@ Welcome to **SpringAI Hotel**. These Terms of Service outline the rules and cond
 
 ## 2. Changes to Bookings
 
-- Changes can be made up to **24 hours before** your scheduled arrival.
+- Changes (except cancellations) can be made up to **24 hours before** your scheduled arrival.
 - You can make changes online, through the mobile app, or by contacting our customer support team.
 - Change fees apply based on room category:
     - **Standard Room**: €50
