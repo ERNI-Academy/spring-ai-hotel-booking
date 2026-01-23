@@ -7,6 +7,8 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
+import reactor.core.publisher.Flux;
+
 @Service
 public class ChatService
 {
@@ -49,6 +51,15 @@ public class ChatService
         .user(userMessage)
         .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
         .call()
+        .content();
+  }
+
+  public Flux<String> chatStream(String chatId, String userMessage)
+  {
+    return chatClient.prompt()
+        .user(userMessage)
+        .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
+        .stream()
         .content();
   }
 }

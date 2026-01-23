@@ -11,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ChatService } from '../../services/chat.service';
+import { appChatStreaming } from '../../app.config';
 
 interface Message {
   id: string;
@@ -50,8 +51,7 @@ export class ChatComponent {
   ]);
   currentMessage = signal('');
   isLoading = signal(false);
-  // Computed signal for display columns
-  displayedColumns = signal(['bookingNumber', 'firstName', 'lastName', 'date', 'bookingStatus', 'from', 'to', 'roomType']);
+
   // ViewChild reference to the messages container for auto-scrolling
   @ViewChild('messagesContainer') private readonly messagesContainer!: ElementRef;
 
@@ -64,6 +64,20 @@ export class ChatComponent {
     });
   }
 
+  addUserMessage(messageText: string) {
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: messageText,
+      isUser: true,
+      timestamp: new Date()
+    };
+
+    this.messages.update(messages => [...messages, userMessage]);
+    this.currentMessage.set('');
+    this.isLoading.set(true);
+  }
+
   sendMessage() {
     const messageText = this.currentMessage()
       .trim();
@@ -71,18 +85,7 @@ export class ChatComponent {
       return;
     }
 
-    // Add user message
-    const userMessage: Message = {
-      id:        Date.now()
-                   .toString(),
-      content:   messageText,
-      isUser:    true,
-      timestamp: new Date()
-    };
-
-    this.messages.update(messages => [...messages, userMessage]);
-    this.currentMessage.set('');
-    this.isLoading.set(true);
+    this.addUserMessage(messageText);
 
     // Send message to API
     this.chatService.sendMessage(messageText)
@@ -115,10 +118,100 @@ export class ChatComponent {
       });
   }
 
+  sendMessageStream() {
+    const messageText = this.currentMessage().trim();
+    if (!messageText) {
+      return;
+    }
+
+    this.addUserMessage(messageText);
+
+    // Add placeholder for AI response
+    const aiMessageId = (Date.now() + 1).toString();
+    this.streamSSE(messageText, aiMessageId);
+  }
+
+  private async streamSSE(messageText: string, aiMessageId: string): Promise<void> {
+    try {
+      const response = await fetch('/api/customer-support', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'text/event-stream'
+        },
+        body: JSON.stringify({ text: messageText })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const decoder = new TextDecoderStream();
+      let accumulatedContent = '';
+      let buffer = '';
+      response.body?.pipeThrough(decoder);
+      const reader = decoder.readable.getReader();
+
+      if (!reader) {
+        throw new Error('No reader available');
+      }
+
+      let first = true;
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          this.isLoading.set(false);
+          break;
+        }
+
+        buffer += value;
+
+        const data = buffer.replace(/data:|\n\n/g, "");
+        accumulatedContent += data;
+        buffer = '';
+
+        if (first) {
+          const aiResponse: Message = {
+            id: aiMessageId,
+            content: '',
+            isUser: false,
+            timestamp: new Date()
+          };
+          this.messages.update(messages => [...messages, aiResponse]);
+          first = false;
+        }
+
+        this.messages.update(messages =>
+          messages.map(msg =>
+            msg.id === aiMessageId
+              ? { ...msg, content: accumulatedContent }
+              : msg
+          )
+        );
+      }
+    } catch (error) {
+      console.error('Error streaming message:', error);
+
+      this.messages.update(messages =>
+        messages.map(msg =>
+          msg.id === aiMessageId
+            ? { ...msg, content: 'Sorry, I\'m having trouble connecting right now. Please try again in a moment.' }
+              : msg
+        )
+      );
+      this.isLoading.set(false);
+    }
+  }
+
   onKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      this.sendMessage();
+      if (appChatStreaming) {
+        this.sendMessageStream();
+      } else {
+        this.sendMessage();
+      }
     }
   }
 
