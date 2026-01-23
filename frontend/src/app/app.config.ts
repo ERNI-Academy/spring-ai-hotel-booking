@@ -12,3 +12,5 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch())
   ]
 };
+
+export const appChatStreaming = true;

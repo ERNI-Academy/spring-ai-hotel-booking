@@ -11,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ChatService } from '../../services/chat.service';
+import { appChatStreaming } from '../../app.config';
 
 interface Message {
   id: string;
@@ -206,7 +207,11 @@ export class ChatComponent {
   onKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      this.sendMessageStream();
+      if (appChatStreaming) {
+        this.sendMessageStream();
+      } else {
+        this.sendMessage();
+      }
     }
   }
 
