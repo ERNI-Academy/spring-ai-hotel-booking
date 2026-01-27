@@ -1,0 +1,57 @@
+# Application Configuration
+spring:
+  application:
+    name: springaihotel-booking
+
+  ai:
+    azure:
+      openai:
+        api-key: ${AZURE_OPENAI_API_KEY}
+        endpoint: https://services-aida-apps-sweden.openai.azure.com/
+        chat:
+          options:
+            deployment-name: gpt-5-mini
+            temperature: 1
+        embedding:
+          options:
+            model: text-embedding-3-small
+    chat:
+      client:
+        observations:
+          log-prompt: true
+    vectorstore:
+      pgvector:
+        dimensions: 1536
+        distance-type: COSINE_DISTANCE
+        remove-existing-vector-store-table: false
+        initialize-schema: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: myuser
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    com.erni: DEBUG
+    org.springframework.ai: DEBUG
+    org.springframework.jdbc.core: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
