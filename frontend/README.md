@@ -12,6 +12,12 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+Or you can run:
+
+```bash
+npm start
+```
+That is the same as `ng serve --proxy-config proxy.conf.js -o`, to use the proxy configuration for API calls and open the browser automatically.
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
